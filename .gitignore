@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.env
+schedule.json
+state.json
+logs/
+out/
+*.log
+.DS_Store
