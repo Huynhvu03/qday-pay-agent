@@ -183,10 +183,25 @@ These need the owner's accounts — the agent cannot do them:
   (`tx_max_gas` 30,000,000), latest block read, `pnpm status` and
   `pnpm plan` against the real REST/EVM endpoints, `pnpm run-once`
   refusing both due payments with `INSUFFICIENT_FLOAT` and logging them.
-- **Not yet tested on-chain** (blocked on the faucet — see above):
-  PQC key registration, window open, a real payment inside a window,
-  authenticator link, `MsgExecuteEVM` / `MsgExecuteCosmos` execution.
-  These are the first runs after funding.
+- **Live on-chain run** (25 Nov 2026, agent funded by the owner):
+  the full float flow executed on `qorechain-diana` —
+  PQC key registration tx
+  `6F5D1FCE744686A1A932CCFBC7175C3A6426989169D6712E606BE41AD5241F18`;
+  scoped window opened by tx
+  `04F65CFDA2EA83ABEEEB1EB5DADB11268A1AEF21F54E72369A022D5C9A3D841E`
+  (window `10727476-10728076`: 600 blocks, 1 tx, 125,000 uqor, single
+  allowlisted target); first real payment inside the window —
+  100,000 uqor paid, tx
+  `0xbbc4d5e1cf080dbec5583b742fe8c54e6afd272f2f9eb36231169d67505955b9`,
+  receipt success, window consumed exactly (0 txs / 0 uqor left).
+  The live run found and fixed two bugs: a local schedule with two
+  entries paying the same address is rejected by the schedule loader
+  (`duplicate payee address`), and `sendFloatPayment` passed the raw
+  sender address as the viem account, which the node refuses
+  ("account unlock with HTTP access is forbidden") — it now signs
+  with the wallet client's local account. Tests still 41/41.
+- **Not yet tested on-chain**: authenticator link (treasury mode) and
+  `MsgExecuteCosmos` execution.
 
 ## Known limitations (honest)
 

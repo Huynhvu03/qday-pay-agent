@@ -66,7 +66,11 @@ export async function sendFloatPayment(input: {
   amountUqor: bigint;
 }): Promise<`0x${string}`> {
   const hash = await input.walletClient.sendTransaction({
-    account: input.from,
+    // Sign locally with the wallet client's own account (built from the
+    // agent private key in createClients). Passing the raw `from` address
+    // here would make viem treat it as a node-managed JSON-RPC account and
+    // the node refuses with "account unlock with HTTP access is forbidden".
+    account: input.walletClient.account,
     to: input.to,
     value: uqorToWei(input.amountUqor),
     gas: 100_000n,
